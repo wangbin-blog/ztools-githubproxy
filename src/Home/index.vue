@@ -167,11 +167,11 @@ const downloadFile = async () => {
   }
 }
 
-const handleLaunchParam = async (param: { code?: string; payload?: string }) => {
-  if (!param.code || !param.payload) return
+const handleLaunchParam = async (param: { code?: string; payload?: string;inputState?: { pastedImage?: string, pastedText?: string } }) => {
+  if (!param.code || !param.inputState?.pastedText) return
   
   // 生成唯一标识来判断是否已经处理过该参数
-  const paramKey = `${param.code}-${param.payload}`
+  const paramKey = `${param.code}-${param.inputState?.pastedText}`
   
   // 如果已经处理过相同的参数，则跳过
   if (lastProcessedParam === paramKey) return
@@ -179,7 +179,7 @@ const handleLaunchParam = async (param: { code?: string; payload?: string }) => 
   // 标记为已处理
   lastProcessedParam = paramKey
   
-  githubUrl.value = param.payload
+  githubUrl.value = param.inputState?.pastedText
   
   if (param.code === 'download') {
     await downloadFile()
